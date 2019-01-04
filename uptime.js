@@ -30,12 +30,12 @@ const server = http.createServer((request, response) => {
    const method = request.method;
 
    // get the query string as an object
-   const queryString = parsedUrl.query;
+   const queryStringObj = parsedUrl.query;
 
    // get the headers as an object
    const headers = request.headers;
 
-   // get the payload, if any (as a stream)
+   // get the payload, if any (as a string stream)
    const decoder = new StringDecoder("utf-8");
    let buffer = "";
    // respond to the "data" event which specifies that data is being streamed in)
@@ -46,11 +46,33 @@ const server = http.createServer((request, response) => {
    request.on("end", () => {
       buffer += decoder.end();
 
-      // send the response
-      response.end("Got it!");
+      // choose the handler that this request should go to (or default to not found)
+      const chosenHandler = router[trimmedPath] || handlers.notFound;
 
-      // log the path that was requested
-      console.log(buffer);
+      // construct the data object to send to the handler
+      const data = {
+         trimmedPath,
+         queryStringObj,
+         method,
+         headers,
+         payload: buffer
+      };
+
+      // call the request handler
+      chosenHandler(data, (statusCode, payload) => {
+         statusCode = typeof statusCode === "number" ? statusCode : 200;
+         payload = payload || {};
+
+         // convert the payload to a string
+         const payloadString = JSON.stringify(payload);
+
+         // return the response
+         response.writeHead(statusCode);
+         response.end(payloadString);
+
+         // log the path that was requested
+         console.log("Returned this response: ", statusCode, payloadString);
+      });
    });
 });
 
@@ -60,3 +82,20 @@ const PORT = 3000;
 server.listen(PORT, () => {
    console.log(`The server is listening on port ${PORT}...`);
 });
+
+// Object containing all of the handlers
+const handlers = {
+   sample(data, callback) {
+      console.log("The request was routed to /sample");
+      callback(406, { name: "Sample header" });
+   },
+   notFound(data, callback) {
+      console.log("The request was routed to not found");
+      callback(404);
+   }
+};
+
+// Define the request router
+const router = {
+   sample: handlers.sample
+};
