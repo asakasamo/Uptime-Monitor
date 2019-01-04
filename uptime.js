@@ -24,11 +24,14 @@ const server = http.createServer((request, response) => {
    // trim any trailing slashes
    let trimmedPath = path.replace(/^\/+|\/+$/g, "");
 
+   // Get the HTTP method
+   let method = request.method;
+
    // send the response
    response.end("Got it!");
 
    // log the path that was requested
-   console.log(`Request received on path: ${trimmedPath}`);
+   console.log(`Request received on path ${trimmedPath} with method ${method}`);
 });
 
 const PORT = 3000;
