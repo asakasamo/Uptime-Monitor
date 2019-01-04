@@ -13,6 +13,8 @@ const http = require("http");
 // the builtin url module, which provides functionality for parsing urls
 const url = require("url");
 
+const StringDecoder = require("string_decoder").StringDecoder;
+
 // The server, which will listen on a port and respond with data
 // The server should respond to all requests with a string
 const server = http.createServer((request, response) => {
@@ -33,11 +35,23 @@ const server = http.createServer((request, response) => {
    // get the headers as an object
    const headers = request.headers;
 
-   // send the response
-   response.end("Got it!");
+   // get the payload, if any (as a stream)
+   const decoder = new StringDecoder("utf-8");
+   let buffer = "";
+   // respond to the "data" event which specifies that data is being streamed in)
+   request.on("data", (data) => {
+      buffer += decoder.write(data);
+   });
+   // respond to the "end" event, which specifies that our data stream has ended
+   request.on("end", () => {
+      buffer += decoder.end();
 
-   // log the path that was requested
-   console.log("Headers:", headers);
+      // send the response
+      response.end("Got it!");
+
+      // log the path that was requested
+      console.log(buffer);
+   });
 });
 
 const PORT = 3000;
