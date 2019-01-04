@@ -17,21 +17,30 @@ const url = require("url");
 // The server should respond to all requests with a string
 const server = http.createServer((request, response) => {
    // get the URL and parse it (including the query string)
-   let parsedUrl = url.parse(request.url, true);
+   const parsedUrl = url.parse(request.url, true);
 
    // get the path
-   let path = parsedUrl.pathname;
+   const path = parsedUrl.pathname;
    // trim any trailing slashes
-   let trimmedPath = path.replace(/^\/+|\/+$/g, "");
+   const trimmedPath = path.replace(/^\/+|\/+$/g, "");
 
-   // Get the HTTP method
-   let method = request.method;
+   // get the HTTP method
+   const method = request.method;
+
+   // get the query string
+   const queryString = parsedUrl.query;
 
    // send the response
    response.end("Got it!");
 
    // log the path that was requested
-   console.log(`Request received on path ${trimmedPath} with method ${method}`);
+   console.log(
+      `Request received! 
+      Path: ${trimmedPath} 
+      Method: ${method}
+      Query:`,
+      queryString
+   );
 });
 
 const PORT = 3000;
