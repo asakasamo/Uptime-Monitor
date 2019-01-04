@@ -27,20 +27,17 @@ const server = http.createServer((request, response) => {
    // get the HTTP method
    const method = request.method;
 
-   // get the query string
+   // get the query string as an object
    const queryString = parsedUrl.query;
+
+   // get the headers as an object
+   const headers = request.headers;
 
    // send the response
    response.end("Got it!");
 
    // log the path that was requested
-   console.log(
-      `Request received! 
-      Path: ${trimmedPath} 
-      Method: ${method}
-      Query:`,
-      queryString
-   );
+   console.log("Headers:", headers);
 });
 
 const PORT = 3000;
