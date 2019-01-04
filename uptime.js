@@ -61,12 +61,13 @@ const server = http.createServer((request, response) => {
       // call the request handler
       chosenHandler(data, (statusCode, payload) => {
          statusCode = typeof statusCode === "number" ? statusCode : 200;
-         payload = payload || {};
+         payload = typeof payload === "object" ? payload : {};
 
          // convert the payload to a string
          const payloadString = JSON.stringify(payload);
 
          // return the response
+         response.setHeader("Content-Type", "application/json");
          response.writeHead(statusCode);
          response.end(payloadString);
 
