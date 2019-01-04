@@ -13,7 +13,11 @@ const http = require("http");
 // the builtin url module, which provides functionality for parsing urls
 const url = require("url");
 
+// the builtin StringDecoder class, which lets you decode streams as strings
 const StringDecoder = require("string_decoder").StringDecoder;
+
+// the config file
+const config = require("./config");
 
 // The server, which will listen on a port and respond with data
 // The server should respond to all requests with a string
@@ -77,13 +81,6 @@ const server = http.createServer((request, response) => {
    });
 });
 
-const PORT = 3000;
-
-// Start the server and have it listen on port 3000
-server.listen(PORT, () => {
-   console.log(`The server is listening on port ${PORT}...`);
-});
-
 // Object containing all of the handlers
 const handlers = {
    sample(data, callback) {
@@ -100,3 +97,10 @@ const handlers = {
 const router = {
    sample: handlers.sample
 };
+
+// Start the server and have it listen on port 3000
+server.listen(config.port, () => {
+   console.log(
+      `Server is listening (port ${config.port} in ${config.envName} mode)...`
+   );
+});
