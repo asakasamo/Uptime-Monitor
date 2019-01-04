@@ -7,12 +7,28 @@ alerts when those resources "go down" or "come back up".
 
 // Dependencies
 
-// the HTTP module, which lets us create a server (that will listen on ports and respond with data)
+// the builtin http module, which provides functionality for creating servers
 const http = require("http");
 
+// the builtin url module, which provides functionality for parsing urls
+const url = require("url");
+
+// The server, which will listen on a port and respond with data
 // The server should respond to all requests with a string
 const server = http.createServer((request, response) => {
-   response.end("Request received!\n");
+   // get the URL and parse it (including the query string)
+   let parsedUrl = url.parse(request.url, true);
+
+   // get the path
+   let path = parsedUrl.pathname;
+   // trim any trailing slashes
+   let trimmedPath = path.replace(/^\/+|\/+$/g, "");
+
+   // send the response
+   response.end("Got it!");
+
+   // log the path that was requested
+   console.log(`Request received on path: ${trimmedPath}`);
 });
 
 const PORT = 3000;
