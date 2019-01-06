@@ -5,10 +5,13 @@ alerts when those resources "go down" or "come back up".
 
 */
 
-// Dependencies
+/**
+ * Dependencies
+ */
 
-// the builtin http module, which provides functionality for creating servers
+// the builtin http/s modules, which provides functionality for creating servers
 const http = require("http");
+const https = require("https");
 
 // the builtin url module, which provides functionality for parsing urls
 const url = require("url");
@@ -16,12 +19,35 @@ const url = require("url");
 // the builtin StringDecoder class, which lets you decode streams as strings
 const StringDecoder = require("string_decoder").StringDecoder;
 
-// the config file
+// the server config file
 const config = require("./config");
 
-// The server, which will listen on a port and respond with data
-// The server should respond to all requests with a string
-const server = http.createServer((request, response) => {
+// the filesystem
+const fs = require("fs");
+
+/**
+ * Global variables
+ */
+
+// The servers, which will listen on a port and respond with data
+const httpServer = http.createServer((req, res) => {
+   unifiedServer(req, res);
+});
+
+const httpsServerOptions = {
+   key: fs.readFileSync("./https/key.pem"),
+   cert: fs.readFileSync("./https/cert.pem")
+};
+
+const httpsServer = https.createServer(httpsServerOptions, (req, res) => {
+   unifiedServer(req, res);
+});
+
+/**
+ * Functions (server logic)
+ */
+
+function unifiedServer(request, response) {
    // get the URL and parse it (including the query string)
    const parsedUrl = url.parse(request.url, true);
 
@@ -41,7 +67,9 @@ const server = http.createServer((request, response) => {
 
    // get the payload, if any (as a string stream)
    const decoder = new StringDecoder("utf-8");
+
    let buffer = "";
+
    // respond to the "data" event which specifies that data is being streamed in)
    request.on("data", (data) => {
       buffer += decoder.write(data);
@@ -79,7 +107,7 @@ const server = http.createServer((request, response) => {
          console.log("Returned this response: ", statusCode, payloadString);
       });
    });
-});
+}
 
 // Object containing all of the handlers
 const handlers = {
@@ -98,9 +126,12 @@ const router = {
    sample: handlers.sample
 };
 
-// Start the server and have it listen on port 3000
-server.listen(config.port, () => {
-   console.log(
-      `Server is listening (port ${config.port} in ${config.envName} mode)...`
-   );
+// Start the http server
+httpServer.listen(config.httpPort, () => {
+   console.log(`Server is listening on port ${config.httpPort}...`);
+});
+
+// Start the https server
+httpsServer.listen(config.httpsPort, () => {
+   console.log(`Server is listening on port ${config.httpsPort}...`);
 });
