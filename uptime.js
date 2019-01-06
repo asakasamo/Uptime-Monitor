@@ -102,28 +102,25 @@ function unifiedServer(request, response) {
          response.setHeader("Content-Type", "application/json");
          response.writeHead(statusCode);
          response.end(payloadString);
-
-         // log the path that was requested
-         console.log("Returned this response: ", statusCode, payloadString);
       });
    });
 }
 
 // Object containing all of the handlers
 const handlers = {
-   sample(data, callback) {
-      console.log("The request was routed to /sample");
-      callback(406, { name: "Sample header" });
+   ping(data, callback) {
+      console.log("pong");
+      callback(200);
    },
    notFound(data, callback) {
-      console.log("The request was routed to not found");
+      console.log("Caught a 404");
       callback(404);
    }
 };
 
 // Define the request router
 const router = {
-   sample: handlers.sample
+   ping: handlers.ping
 };
 
 // Start the http server
