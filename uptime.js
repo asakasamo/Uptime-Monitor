@@ -25,6 +25,8 @@ const config = require("./config");
 // the filesystem
 const fs = require("fs");
 
+const handlers = require("./lib/handlers");
+
 /**
  * Global variables
  */
@@ -105,18 +107,6 @@ function unifiedServer(request, response) {
       });
    });
 }
-
-// Object containing all of the handlers
-const handlers = {
-   ping(data, callback) {
-      console.log("pong");
-      callback(200);
-   },
-   notFound(data, callback) {
-      console.log("Caught a 404");
-      callback(404);
-   }
-};
 
 // Define the request router
 const router = {
