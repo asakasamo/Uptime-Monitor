@@ -20,12 +20,13 @@ const url = require("url");
 const StringDecoder = require("string_decoder").StringDecoder;
 
 // the server config file
-const config = require("./config");
+const config = require("./lib/config");
 
 // the filesystem
 const fs = require("fs");
 
 const handlers = require("./lib/handlers");
+const helpers = require("./lib/helpers");
 
 /**
  * Global variables
@@ -59,7 +60,7 @@ function unifiedServer(request, response) {
    const trimmedPath = path.replace(/^\/+|\/+$/g, "");
 
    // get the HTTP method
-   const method = request.method;
+   const method = request.method.toLowerCase();
 
    // get the query string as an object
    const queryStringObj = parsedUrl.query;
@@ -89,7 +90,7 @@ function unifiedServer(request, response) {
          queryStringObj,
          method,
          headers,
-         payload: buffer
+         payload: helpers.parseJsonToObject(buffer)
       };
 
       // call the request handler
@@ -110,7 +111,8 @@ function unifiedServer(request, response) {
 
 // Define the request router
 const router = {
-   ping: handlers.ping
+   ping: handlers.ping,
+   users: handlers.users
 };
 
 // Start the http server
