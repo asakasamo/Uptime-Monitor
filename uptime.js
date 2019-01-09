@@ -116,8 +116,6 @@ const router = {
    tokens: handlers.tokens
 };
 
-console.log(helpers.createRandomString(10));
-
 // Start the http server
 httpServer.listen(config.httpPort, () => {
    console.log(`Server is listening on port ${config.httpPort}...`);
