@@ -28,6 +28,11 @@ const fs = require("fs");
 const handlers = require("./lib/handlers");
 const helpers = require("./lib/helpers");
 
+// @TODO: DELETE THIS TEST
+helpers.sendSmsViaTwilio("3475756351", "Peanut Butter JellyTime", (err) => {
+   console.log(err || "Success!");
+});
+
 /**
  * Global variables
  */
