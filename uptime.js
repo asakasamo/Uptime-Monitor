@@ -7,7 +7,7 @@ alerts when those resources "go down" or "come back up".
 
 // Dependencies
 const server = require("./lib/server");
-// const workers = require("./lib/workers");
+const workers = require("./lib/workers");
 
 // Declare the app
 const app = {
@@ -16,7 +16,7 @@ const app = {
       // Start the server
       server.init();
       //start the workers
-      // workers.init();
+      workers.init();
    }
 };
 
