@@ -1,0 +1,6 @@
+{
+   "html.autoClosingTags": false,
+   "[html]": {
+      "editor.formatOnSave": false
+   }
+}
