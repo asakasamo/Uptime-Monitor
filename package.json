@@ -1,0 +1,25 @@
+{
+   "name": "uptime-monitor-deploy",
+   "version": "1.0.0",
+   "description": "Uptime Monitor",
+   "main": "uptime.js",
+   "directories": {
+      "lib": "lib"
+   },
+   "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+   },
+   "repository": {
+      "type": "git",
+      "url": "git+https://github.com/asakasamo/Uptime-Monitor.git"
+   },
+   "author": "Al-John",
+   "license": "ISC",
+   "bugs": {
+      "url": "https://github.com/asakasamo/Uptime-Monitor/issues"
+   },
+   "homepage": "https://github.com/asakasamo/Uptime-Monitor#readme",
+   "engines": {
+      "node": "10.x"
+   }
+}
