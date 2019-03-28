@@ -1,1 +1,1 @@
-web: node uptime.js
+web: set NODE_ENV=production&&node uptime.js
